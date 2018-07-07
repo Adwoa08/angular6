@@ -1,0 +1,122 @@
+@import '../../scss/vars';
+
+.top-row {
+    .tooltip-top {
+        display: none;
+    }
+    .left-col {
+        padding: $zero-left-padding;
+        .report-alter-wrapper .btn {
+            margin-left: 0;
+            margin-right: 4px;
+            width: 65px;
+        }
+    }
+
+    .right-col {
+        #db-dateField {
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+        }
+
+        .report-display-logics {
+
+            .float-right {
+                margin-top: -5px;
+
+                #reportDateBtns {
+                    display: inline-block;
+                    position: relative;
+                    top: 20x;
+                    top: -3px;
+                    .btn {
+                        transition: all .2s ease;
+                        &:hover { 
+                            transform: scale(1.5); 
+                        }
+                    }
+                    .fa-icons {
+                        font-size: 25px;
+                        font-weight: 900;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.dbre-header {
+    position: relative;
+    .dbre-sortIcon {
+        position: absolute;
+        right: 0px;
+    }
+}
+
+
+
+
+// Old styles 
+.report-list-table > tbody > tr,
+.report-list-table > tbody > tr > td {
+  background-color: #f5f5f5;
+}
+
+.report-list-table > tbody > tr.incomplete,
+.report-list-table > tbody > tr.incomplete > td {
+  background-color: white;
+  font-weight: bold;
+}
+
+.report-list-table > tbody > tr.incomplete > td select {
+  font-weight: normal;
+}
+
+/*.report-list-table > tbody > tr.pink,
+    .report-list-table > tbody > tr.pink > td {
+        background-color: #ebcccc;
+    }*/
+
+.report-list-table > tbody > tr.webR,
+.report-list-table > tbody > tr.webR > td,
+.report-list-table > tbody > tr.sftpU,
+.report-list-table > tbody > tr.sftpU > td,
+.report-list-table > tbody > tr.webU,
+.report-list-table > tbody > tr.webU > td,
+.report-list-table > tbody > tr.zeroFtp,
+.report-list-table > tbody > tr.zeroFtp > td,
+.report-list-table > tbody > tr.zeroWeb,
+.report-list-table > tbody > tr.zeroWeb > td,
+.report-list-table > tbody > tr.zeroEntry,
+.report-list-table > tbody > tr.zeroEntry > td {
+  background-color: #ebcccc;
+}
+
+
+.report-list-table > tbody > tr.warning,
+.report-list-table > tbody > tr.warning > td,
+.report-list-table > tbody > tr.warning.incomplete,
+.report-list-table > tbody > tr.warning.incomplete > td {
+  background-color: #faf2cc;
+}
+
+.report-list-table .col-icon {
+  cursor: pointer;
+  padding: 0;
+  text-align: center;
+  width: 30px;
+}
+
+.report-list-table .col-valid {
+  color: red;
+}
+
+.report-list-table .col-valid a {
+  color: red;
+  text-decoration: none;
+}
+

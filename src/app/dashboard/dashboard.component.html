@@ -1,0 +1,211 @@
+<div class="row">
+  <div class="col-12">
+    <div class="row top-row">
+      <div class="col left-col">
+        <div class="float-left report-alter-wrapper">
+              <button class="btn btn-sm btn-outline-danger" tooltip="Create" placement="top" (click)="createClick()">
+                  <fa name="fas fa-pencil"></fa>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" tooltip="Submit" placement="top" (click)="submitClick()">
+                <fa name="fas fa-upload"></fa>
+              </button>
+              <button class="btn btn-sm btn-outline-secondary" tooltip="Delete" placement="top" (click)="deleteClick()">
+                <fa name="fas fa-times"></fa>
+              </button>
+              <!-- <button class="btn btn-sm btn-outline-secondary" tooltip="Download" placement="top" (click)="searchReportByPrsc()">
+                <fa name="fas fa-download"></fa>
+              </button> -->
+              <button class="btn btn-sm btn-outline-secondary" tooltip="Search" placement="top" aw-modal-trigger="prscSearch" >
+                <fa name="fas fa-search"></fa>
+              </button>
+        </div>
+      </div>
+      <div class="col right-col">
+        <!--<div class="row float-right" id="report-display-wrapper">
+          <div class="col date-field-div">
+            <input type="text" 
+              class="form-control" 
+              id="db-dateField"
+              placeholder="Datepicker" 
+              bsDatepicker 
+              [(ngModel)]="reportDate" 
+              (ngModelChange)="onReportDateChange($event)"
+              [bsConfig]="datePickerConfig"/>
+          </div>
+          <div class="col report-display-logics">
+               <div class="float-right">
+                  <strong>1</strong> -
+                  <strong>10</strong> of
+                  <strong>500</strong>
+                  <div id="reportDateBtns">
+                    <span class="btn" tooltip="Newer" placement="top" size="lg" (click)="nextPage()">
+                        <fa name="angle-left" class='fa-icons'></fa>
+                    </span>
+                      <span class="btn" tooltip="Older" placement="top" size="lg" (click)="previousPage()">
+                        <fa name="angle-right" class='fa-icons'></fa>
+                      </span>
+                    </div>
+               </div>
+          </div>
+        </div>-->
+      </div>
+    </div>
+
+
+  <div class="row middle-row">
+        <!--<ajax-loading-spinner></ajax-loading-spinner>
+      <table class="table report-list-table">
+        <thead>
+          <tr>
+            <th>State  <fa name="filter"></fa></th>
+            <th>Status</th>
+            <th>Report Date(s)</th>
+            <th>Submission Date</th>
+            <th>Reporting Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let report of reports; let i = index; trackBy: trackReportId"
+              [ngClass]="{ warning: report.Selected,
+                         incomplete: report.StatusId != 3,
+                         webR: report.StatusId === 1,
+                         sftpU: report.StatusId === 5,
+                         webU: report.StatusId === 6,
+                         zeroFtp: report.StatusId === 7,
+                         zeroWeb: report.StatusId === 8,
+                         zeroEntry: report.StatusId === 9 }">
+            <td>
+              <span *ngIf="!report.HasUrl">{{report.StateProvinceId}}</span>
+              <a class="js-stateId" 
+                  *ngIf="report.HasUrl"
+                  href="{{report.StateSetting.WebPortalUrl}}" 
+                  target="_blank">
+                  {{report.StateProvinceId}}
+                </a>
+            </td>
+            <td>
+               
+                <span *ngIf="report.StatusId; else noStatusId">
+                  <select class="form-control" (ngModelChange)="statusChange($event, i)" [(ngModel)]="report.StatusId">
+                    <option *ngFor="let status of statuses" [ngValue]="status.StatusId">{{status.Status}}</option>
+                  </select>
+                </span>
+                <ng-template #noStatusId>
+                  {{ report.Status }}
+                </ng-template>
+            </td>
+            <td>
+                <span *ngIf="report.$id">{{report.DateRangeString | date:'shortDate'}} </span>
+            </td>
+            <td>
+              <span *ngIf="report.$id"> {{report.CreateDate | date:'shortDate'  }} </span>
+            </td>
+            <td>{{ report.ReportingMethod }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+       -->
+
+      <!-- <button type="button" class="btn btn-primary" (click)="openModal(template)">Open modal</button>
+      <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Modal</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque delectus enim esse excepturi, impedit,
+            iste magnam officia optio, quam quis quisquam saepe sint unde velit vitae! Animi in iusto ut?</p>
+            <button type="button" class="btn btn-primary" popover="Vivamus sagittis">popover</button>
+            <button type="button" class="btn btn-primary" tooltip="Vivamus sagittis">tooltip</button>
+        </div>
+      </ng-template>
+ -->
+
+ <p-table [value]="dashboardReports" [paginator]="true" [rows]="1">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+           <th *ngFor="let col of reportColumns" [pSortableColumn]="col.field" class="dbre-header">
+                {{ col.header }}
+                <p-sortIcon [field]="col.field" class="dbre-sortIcon"></p-sortIcon>
+           </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-report let-columns="reportColumns">
+        <tr>
+          <td *ngFor="let col of reportColumns">
+              {{ report[col.field] }}
+          </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+    </div>
+
+   <!-- primeng featurs -->
+    <div class="row">
+        <p-accordion>
+            <p-accordionTab header="Salads">
+              Salads...
+            </p-accordionTab>
+            <p-accordionTab header="Pasta">
+              Pasta...
+            </p-accordionTab>
+            <p-accordionTab header="Pizza" [selected]="true">
+              <p-radioButton
+                label="Double cheese 🧀🧀"
+                name="pizza"
+                value="double-cheese"
+                [(ngModel)]="pizzaSelection">
+              </p-radioButton><br>
+          
+              <p-radioButton
+                label="Anchovy"
+                name="pizza"
+                value="anchovy"
+                [(ngModel)]="pizzaSelection">
+              </p-radioButton><br>
+          
+              <p-radioButton
+                label="Meat lover's 🍖"
+                name="pizza"
+                value="meat-lover"
+                [(ngModel)]="pizzaSelection">
+              </p-radioButton>
+            </p-accordionTab>
+          </p-accordion>
+          
+          <br>
+          
+          <p-panel header="Extras" *ngIf="pizzaSelection && pizzaSelection.length">
+            🍕 Would you like extra cheese on your pizza?
+            <button pButton type="button" label="Ok, yeah!"></button>
+          </p-panel>
+    </div>
+  </div>
+</div>
+
+
+<aw-modal 
+  awElementId="prscSearch" 
+  title="Prescription Search" 
+  (onSaveClicked)="onSearchByPrsc('prscSearch', prscValues)"
+  (onCancelClicked)="handleModalClose('prscSearch', $event)"
+  [closeBtnLabel]="closeBtnLabel"
+  [saveBtnLabel]="saveBtnLabel" >
+    
+    <form (ngSubmit)="onSearchByPrsc('prscSearch', prscValues)">
+      <input [(ngModel)]="prscValues" 
+      name="prscValue" 
+      type="text" 
+      class="form-control"
+      oninput="this.value = this.value.replace(/[^0-9,]/g, '');" />
+      <small [style.color]="isPrscSearchEmpty ? 'red' : ''">*Please separate each prescription number with a comma</small>
+    </form>
+
+</aw-modal>
+                        

@@ -1,0 +1,49 @@
+<header>
+  <nav class="fixed-top navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="btn-group" dropdown>
+            <!-- <img alt="MedQuest Pharmacy" [src]="MqrxLogo"/>  -->
+            <button type="button" dropdownToggle id="btn-nav" class="btn">
+                <!-- class="dropdown-toggle" it was on the button -->
+                <div class="split">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </div>
+                <div class="split nav-down-arrow">
+                  <span class="caret"></span>
+                </div>
+              </button>
+        <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li routerLinkActive="active current"><a class="dropdown-item" routerLink="dashboard">Dashboard</a></li>
+            <li routerLinkActive="active current"><a class="dropdown-item" routerLink="states">States</a></li>
+            <li routerLinkActive="active current"><a class="dropdown-item" routerLink="directory">Directory</a></li>
+            <li routerLinkActive="active current"><a class="dropdown-item" routerLink="pharmacy">Pharmacy</a></li>
+          </ul>
+      </div>
+    </div>
+
+    <ng-progress
+   [speed]="200" 
+   [ease]="'linear'" 
+   [meteor]="true"
+    [spinner]="false" 
+    [spinnerPosition]="'right'" 
+    [color]="'red'" 
+    [trickleSpeed]="250" 
+    [thick]="true"
+      ></ng-progress>
+
+  </nav>
+</header>
+
+
+
+<div class="container-fluid">
+<div class="row justify-content-center">
+  <div class="col-11" id="components-page">
+      <router-outlet id='route-outlet'></router-outlet>
+  </div>
+</div>
+</div>

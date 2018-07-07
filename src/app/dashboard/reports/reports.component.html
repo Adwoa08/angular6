@@ -1,0 +1,476 @@
+<main [class.main-flex]="isSearchResultEmpty" class="row">
+    <div class="col">
+                <article class="row" style="margin-bottom: 10px;" *ngIf="isSearchResultEmpty">
+                    <div  class="col-md-10 offset-md-1">
+                        <re-searchbox 
+                            (onSearchClicked)="searchReportByPrescriptionsClick($event)" 
+                            [display]="isSearchResultEmpty"
+                            [isSearchBoxEmptied]="isSearchBoxEmptied" >
+                        </re-searchbox>
+                    </div>
+                </article>
+                
+                <article *ngIf="!isSearchResultEmpty">
+                    <section class="row" style="margin-bottom: 10px;">
+                        <div  class="col-md-6 offset-md-6">
+                            <re-searchbox 
+                                (onSearchClicked)="searchReportByPrescriptionsClick($event)" 
+                                [display]="isSearchResultEmpty"
+                                [isSearchBoxEmptied]="isSearchBoxEmptied" >
+                            </re-searchbox>
+                        </div>
+                    </section>
+                    <section class="row">
+                            <div class="col">
+                                    <div class="card">
+                                        <div class="card-header">PRESCRIPTION FILLED RESULTS</div>
+                                        <div class="card-body">
+                                            <div class="card mb-2" *ngFor="let result of prscSearchResults">
+                                                <div class="card-header text-white bg-primary">{{result.RxNumber}} - {{result.PatientName}}</div>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Date Filled</th>
+                                                                <th>Drug Name</th>
+                                                                <th>Prescriber</th>
+                                                                <th>Dea Number</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr  *ngFor="let res of result.Details">
+                                                                <td>
+                                                                    <re-edit 
+                                                                        [isSubmitted]="res.Submitted"
+                                                                        [edit]="res.Editing"
+                                                                        [isAllEditBtnsDisabled]="isAllEditBtnsDisabled" 
+                                                                        (editClicked)="onEditClicked($event, res)">
+                                                                    </re-edit>
+                                                                </td>
+                                                                <td>{{res.DateFilled | date:'shortDate'}}</td>
+                                                                <td>Testosterone and others will go here</td>
+                                                                <td>Dr. Joe M</td>
+                                                                <td>MBX28797</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>  
+                                    <!-- <div class="card-body">
+                                            <div class="card mb-2" *ngFor="let result of prscSearchResults">
+                                                    <div class="card-header text-white bg-primary">{{result.RxNumber}} - {{result.PatientName}}</div>
+                                                    <div class="card-body">
+                                                    <div *ngFor="let res of result.Details" class="row">
+                                                        <div class="col" >
+                                                            <re-edit [edit]="res.Editing" [editing]="Editing" (editClicked)="onEditClicked($event, res)">
+                                                            </re-edit>
+                                                        </div>
+                                                        <div class="col">{{res.DateFilled | date:'shortDate'}}</div>
+                                                        <div class="col">Testosterone</div>
+                                                        <div class="col"> Topi-Click</div>
+                                                        <div class="col">Dr. Joe</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div> -->
+                                    </div>
+                            </div>
+                    </section>
+                </article>
+    </div>
+
+    
+</main>
+
+<aw-modal 
+  awElementId="segment-modal" 
+  title="Report Details" 
+  (onSaveClicked)="handleFormSubmit('segment-modal', segmentForm.value)"
+  (onCancelClicked)="handleCancelledForm('segment-modal', $event)"
+  [closeBtnLabel]="closeBtnLabel"
+  [saveBtnLabel]="saveBtnLabel" >
+    <form #segmentForm="ngForm"> 
+        <re-card-display 
+            header="PAT - Patient Information" 
+            primary="true"
+            segmentName="pat"
+            [detailDataFetched]="detailDataFetched.pat"
+            (fetchClicked)="getSegmentDetails($event)" >
+                <div ngModelGroup="pat" *ngIf="detailDataFetched.pat">
+                    <segment-detail-display data="Submitted Values">
+                            <p>Current Values</p>
+                    </segment-detail-display>
+                    <segment-detail-display label="PAT01 - ID FirstName:" [data]="pats.FirstName">
+                            <input class="form-control" name="FirstName" [ngModel]="pat.FirstName" />
+                    </segment-detail-display>
+                    <segment-detail-display label="PAT02 - ID LastName:" [data]="pats.LastName">
+                        <input class="form-control" name="LastName" [ngModel]="pat.LastName" />
+                    </segment-detail-display>
+                    <!-- <segment-detail-display data="Submitted Values">
+                            <p>Current Values</p>
+                    </segment-detail-display>
+                        <segment-detail-display label="PAT01 - ID Qualifier of Patient Identifier:" [data]="pats.PatientIdQualifierIdentifier" [displaystate]="patsDiffs.PatientIdQualifierIdentifier">
+                        <input class="form-control" name="PatientIdQualifierIdentifier" [ngModel]="pat.PatientIdQualifierIdentifier" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT02 - ID Qualifier:" [data]="pats.PatientIdQualifier" [displaystate]="patsDiffs.PatientIdQualifier">
+                        <input class="form-control" name="PatientIdQualifier" [ngModel]="pat.PatientIdQualifier" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT03 - ID of Patient:" [data]="pats.PatientId" [displaystate]="patsDiffs.PatientId">
+                        <input class="form-control" name="PatientId" [ngModel]="pat.PatientId" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT04 - ID Qualifier of Additional Patient Identifier:" [data]="pats.AdditionalPatientIdQualifierIdentifier" [displaystate]="patsDiffs.AdditionalPatientIdQualifierIdentifier">
+                        <input class="form-control" name="AdditionalPatientIdQualifierIdentifier" [ngModel]="pat.AdditionalPatientIdQualifierIdentifier" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT05 - Additional Patient ID Qualifier:" [data]="pats.AddtionalPatientIdQualifier" [displaystate]="patsDiffs.AddtionalPatientIdQualifier">
+                        <input class="form-control" name="AddtionalPatientIdQualifier" [ngModel]="pat.AddtionalPatientIdQualifier" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT06 - Additional ID:" [data]="pats.AdditionalPatientId" [displaystate]="patsDiffs.AdditionalPatientId">
+                        <input class="form-control" name="AdditionalPatientId" [ngModel]="pat.AdditionalPatientId" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT07 - Last Name:" [data]="pats.LastName" [displaystate]="patsDiffs.LastName">
+                        <input class="form-control" name="LastName" [ngModel]="pat.LastName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT08 - First Name:" [data]="pats.FirstName" [displaystate]="patsDiffs.FirstName">
+                        <input class="form-control" name="FirstName" [ngModel]="pat.FirstName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT09 - Middle Name:" [data]="pats.MiddleName" [displaystate]="patsDiffs.MiddleName">
+                        <input class="form-control" name="MiddleName" [ngModel]="pat.MiddleName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT10 - Name Prefix:" [data]="pats.NamePrefix" [displaystate]="patsDiffs.NamePrefix">
+                        <input class="form-control" name="NamePrefix" [ngModel]="pat.NamePrefix" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT11 - Name Suffix:" [data]="pats.NameSuffix" [displaystate]="patsDiffs.NameSuffix">
+                        <input class="form-control" name="NameSuffix" [ngModel]="pat.NameSuffix" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT12 - Address Information:" [data]="pats.Address1" [displaystate]="patsDiffs.Address1">
+                        <input class="form-control" name="Address1" [ngModel]="pat.Address1" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT13 - Address Information:" [data]="pats.Address2" [displaystate]="patsDiffs.Address2">
+                        <input class="form-control" name="Address2" [ngModel]="pat.Address2" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT14 - City Address:" [data]="pats.City" [displaystate]="patsDiffs.City">
+                        <input class="form-control" name="City" [ngModel]="pat.City" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT15 - State Address:" [data]="pats.State" [displaystate]="patsDiffs.State">
+                        <input class="form-control" name="State" [ngModel]="pat.State" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT16 - ZIP Code Address:" [data]="pats.PostalCode" [displaystate]="patsDiffs.PostalCode">
+                        <input class="form-control" name="PostalCode" [ngModel]="pat.PostalCode" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT17 - Phone Number:" [data]="pats.Phone" [displaystate]="patsDiffs.Phone">
+                        <input class="form-control" name="Phone" [ngModel]="pat.Phone" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT18 - Date of Birth:" [data]="pats.BirthDate" [displaystate]="patsDiffs.BirthDate">
+                        <input class="form-control" name="BirthDate" [ngModel]="pat.BirthDate" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT19 - Gender Code:" [data]="pats.GenderCode" [displaystate]="patsDiffs.GenderCode">
+                        <input class="form-control" name="GenderCode" [ngModel]="pat.GenderCode" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT20 - Species Code:" [data]="pats.SpeciesCode" [displaystate]="patsDiffs.SpeciesCode">
+                        <input class="form-control" name="SpeciesCode" [ngModel]="pat.SpeciesCode" />
+                    </segment-detail-display>
+
+
+                    <segment-detail-display label="PAT21 - Patient Location Code:" [data]="pats.PatientLocationCode" [displaystate]="patsDiffs.PatientLocationCode">
+                        <input class="form-control" name="PatientLocationCode" [ngModel]="pat.PatientLocationCode" />
+                    </segment-detail-display>
+
+
+                    <segment-detail-display label="PAT22 - Country of Non-U.S. Resident:" [data]="pats.NonUsResidentCountry" [displaystate]="patsDiffs.NonUsResidentCountry">
+                        <input class="form-control" name="NonUsResidentCountry" [ngModel]="pat.NonUsResidentCountry" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="PAT23 - Name of Animal:" [data]="pats.NameOfAnimal" [displaystate]="patsDiffs.NameOfAnimal">
+                        <input class="form-control" name="NameOfAnimal" [ngModel]="pat.NameOfAnimal" />
+                    </segment-detail-display> -->
+                </div>
+        </re-card-display>
+        
+        <re-card-display 
+            header="DSP - Dispensing Record" 
+            primary="true"
+            segmentName="dsp"
+            [detailDataFetched]="detailDataFetched.dsp"
+            (fetchClicked)="getSegmentDetails($event)" >
+            <div ngModelGroup="dsp" *ngIf="detailDataFetched.dsp">
+                <segment-detail-display data="Submitted Values">
+                        <p>Current Values</p>
+                </segment-detail-display>
+                <segment-detail-display label="DSP01 - Reporting Status:" [data]="dsps.ReportingStatus" [displaystate]="dspsDiffs.ReportingStatus">
+                    <input class="form-control" name="ReportingStatus" [ngModel]="dsp.ReportingStatus" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP02 - Prescription Number:" [data]="dsps.RxNumber" [displaystate]="dspsDiffs.RxNumber">
+                    <input class="form-control" name="RxNumber" [ngModel]="dsp.RxNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP03 - Date Written:" [data]="dsps.DateWritten" [displaystate]="dspsDiffs.DateWritten">
+                    <input class="form-control" name="DateWritten" [ngModel]="dsp.DateWritten" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP04 - Refills Authorized:" [data]="dsps.RefillsAuthorized" [displaystate]="dspsDiffs.RefillsAuthorized">
+                    <input class="form-control" name="RefillsAuthorized" [ngModel]="dsp.RefillsAuthorized" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP05 - Date Filled:" [data]="dsps.DateFilled" [displaystate]="dspsDiffs.DateFilled">
+                    <input class="form-control" name="DateFilled" [ngModel]="dsp.DateFilled" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP06 - Refill Number:" [data]="dsps.RefillNumber" [displaystate]="dspsDiffs.RefillNumber">
+                    <input class="form-control" name="RefillNumber" [ngModel]="dsp.RefillNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP07 - Product ID Qualifier:" [data]="dsps.ProductIdQualifier" [displaystate]="dspsDiffs.ProductIdQualifier">
+                    <input class="form-control" name="ProductIdQualifier" [ngModel]="dsp.ProductIdQualifier" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP08 - Product ID:" [data]="dsps.ProductId" [displaystate]="dspsDiffs.ProductId">
+                    <input class="form-control" name="ProductId" [ngModel]="dsp.ProductId" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP09 - Quantity Dispensed:" [data]="dsps.QuantityDispensed" [displaystate]="dspsDiffs.QuantityDispensed">
+                    <input class="form-control" name="QuantityDispensed" [ngModel]="dsp.QuantityDispensed" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP10 - Days Supply:" [data]="dsps.DaysSupply" [displaystate]="dspsDiffs.DaysSupply">
+                    <input class="form-control" name="DaysSupply" [ngModel]="dsp.DaysSupply" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP11 - Drug Dosage Units Code:" [data]="dsps.DrugDosageUnitsCode" [displaystate]="dspsDiffs.DrugDosageUnitsCode">
+                    <input class="form-control" name="DrugDosageUnitsCode" [ngModel]="dsp.DrugDosageUnitsCode" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP12 - Transmission Form of Rx Origin Code:" [data]="dsps.TransmissionFormOfRxOriginCode" [displaystate]="dspsDiffs.TransmissionFormOfRxOriginCode">
+                    <input class="form-control" name="TransmissionFormOfRxOriginCode" [ngModel]="dsp.TransmissionFormOfRxOriginCode" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP13 - Partial Fill Indicator:" [data]="dsps.PartialFillIndicator" [displaystate]="dspsDiffs.PartialFillIndicator">
+                    <input class="form-control" name="PartialFillIndicator" [ngModel]="dsp.PartialFillIndicator" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP14 - Pharmacist National Provider Identifier (NPI):" [data]="dsps.PharmacistNationalProviderId" [displaystate]="dspsDiffs.PharmacistNationalProviderId">
+                    <input class="form-control" name="PharmacistNationalProviderId" [ngModel]="dsp.PharmacistNationalProviderId" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP15 - Pharmacist State License Number:" [data]="dsps.PharmacistStateLicenseNumber" [displaystate]="dspsDiffs.PharmacistStateLicenseNumber">
+                    <input class="form-control" name="PharmacistStateLicenseNumber" [ngModel]="dsp.PharmacistStateLicenseNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP16 - Classification Code for Payment Type:" [data]="dsps.PaymentTypeClassificationCode" [displaystate]="dspsDiffs.PaymentTypeClassificationCode">
+                    <input class="form-control" name="PaymentTypeClassificationCode" [ngModel]="dsp.PaymentTypeClassificationCode" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP17 - Date Sold:" [data]="dsps.DateSold" [displaystate]="dspsDiffs.DateSold">
+                    <input class="form-control" name="DateSold" [ngModel]="dsp.DateSold" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP18 - RxNorm Product Qualifier:" [data]="dsps.RxNormProductQualifier" [displaystate]="dspsDiffs.RxNormProductQualifier">
+                    <input class="form-control" name="RxNormProductQualifier" [ngModel]="dsp.RxNormProductQualifier" />
+                </segment-detail-display>
+
+
+                <segment-detail-display label="DSP19 - RxNorm Code:" [data]="dsps.RxNormCode" [displaystate]="dspsDiffs.RxNormCode">
+                    <input class="form-control" name="RxNormCode" [ngModel]="dsp.RxNormCode" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP20 - Electronic Prescription Reference Number:" [data]="dsps.ElectronicRxReferenceNumber" [displaystate]="dspsDiffs.ElectronicRxReferenceNumber">
+                    <input class="form-control" name="ElectronicRxReferenceNumber" [ngModel]="dsp.ElectronicRxReferenceNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label=" DSP21 - Electronic Prescription Order Number:" [data]="dsps.ElectronicRxOrderNumber" [displaystate]="dspsDiffs.ElectronicRxOrderNumber">
+                    <input class="form-control" name="ElectronicRxOrderNumber" [ngModel]="dsp.ElectronicRxOrderNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP22 - Quantity Prescribed:" [data]="dsps.QuantityPrescribed" [displaystate]="dspsDiffs.QuantityPrescribed">
+                    <input class="form-control" name="QuantityPrescribed" [ngModel]="dsp.QuantityPrescribed" />
+                </segment-detail-display>
+
+                <segment-detail-display label="DSP23 - Rx SIG:" [data]="dsps.Sig" [displaystate]="dspsDiffs.Sig">
+                    <input class="form-control" name="Sig" [ngModel]="dsp.Sig" />
+                </segment-detail-display>
+
+
+                <segment-detail-display label="DSP24 - Treatment Type:" [data]="dsps.TreatmentType" [displaystate]="dspsDiffs.TreatmentType">
+                    <input class="form-control" name="TreatmentType" [ngModel]="dsp.TreatmentType" />
+                </segment-detail-display>
+
+
+                <segment-detail-display label="DSP25 - Diagnosis Code:" [data]="dsps.DiagnosisCode" [displaystate]="dspsDiffs.DiagnosisCode">
+                    <input class="form-control" name="DiagnosisCode" [ngModel]="dsp.DiagnosisCode" />
+                </segment-detail-display>
+            </div>
+        </re-card-display>
+
+        <re-card-display 
+            header="PRE - Prescriber Information" 
+            primary="true"
+            segmentName="pre"
+            [detailDataFetched]="detailDataFetched.pre"
+            (fetchClicked)="getSegmentDetails($event)" >
+            <div ngModelGroup="pre" *ngIf="detailDataFetched.pre">
+                    <segment-detail-display data="Submitted Values">
+                            <p>Current Values</p>
+                    </segment-detail-display>
+                        
+                    <segment-detail-display label="PRE01 - ID FirstName:" [data]="pres.FirstName">
+                            <input class="form-control" name="FirstName" [ngModel]="pre.FirstName" />
+                    </segment-detail-display>
+        <!--     
+                            <segment-detail-display label="PRE01 - National Provider Identifier:" [data]="pres.NationalProviderId" [displaystate]="presDiffs.NationalProviderId">
+                                <input class="form-control" name="NationalProviderId" [ngModel]="pre.NationalProviderId" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE02 - DEA Number:" [data]="pres.DeaNumber" [displaystate]="presDiffs.DeaNumber">
+                                <input class="form-control" name="DeaNumber" [ngModel]="pre.DeaNumber" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE03 - DEA Number Suffix:" [data]="pres.DeaNumberSuffix" [displaystate]="presDiffs.DeaNumberSuffix">
+                                <input class="form-control" name="DeaNumberSuffix" [ngModel]="pre.DeaNumberSuffix" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE04 - Prescriber State License Number:" [data]="pres.StateLicenseNumber" [displaystate]="presDiffs.StateLicenseNumber">
+                                <input class="form-control" name="StateLicenseNumber" [ngModel]="pre.StateLicenseNumber" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE05 - Last Name:" [data]="pres.LastName" [displaystate]="presDiffs.LastName">
+                                <input class="form-control" name="LastName" [ngModel]="pre.LastName" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE06 - First Name:" [data]="pres.FirstName" [displaystate]="presDiffs.FirstName">
+                                <input class="form-control" name="FirstName" [ngModel]="pre.FirstName" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE07 - Middle Name:" [data]="pres.MiddleName" [displaystate]="presDiffs.MiddleName">
+                                <input class="form-control" name="MiddleName" [ngModel]="pre.MiddleName" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE08 - Phone Number:" [data]="pres.Phone" [displaystate]="presDiffs.Phone">
+                                <input class="form-control" name="Phone" [ngModel]="pre.Phone" />
+                            </segment-detail-display>
+
+                            <segment-detail-display label="PRE09 - XDEA Number:" [data]="pres.XDEANumber" [displaystate]="presDiffs.XDEANumber">
+                                <input class="form-control" name="XDEANumber" [ngModel]="pre.XDEANumber" />
+                            </segment-detail-display>
+        -->
+
+        </div>
+        </re-card-display>
+
+
+        <re-card-display 
+            header="CDI - Compound Drug Ingredient Detail" 
+            primary="true"
+            segmentName="cdi"
+            [detailDataFetched]="detailDataFetched.cdi"
+            (fetchClicked)="getSegmentDetails($event)" >
+            <div ngModelGroup="cdi" *ngIf="detailDataFetched.cdi">
+                <segment-detail-display data="Submitted Values">
+                        <p>Current Values</p>
+                </segment-detail-display>
+                <segment-detail-display label="CDI01 - ID FirstName:" [data]="cdis.FirstName">
+                        <input class="form-control" name="FirstName" [ngModel]="cdi.FirstName" />
+                </segment-detail-display>
+        <!--     
+                <segment-detail-display label="CDI01 - Compound Drug Ingredient Sequence Number:" [data]="cdis.SequenceNumber" [displaystate]="cdisDiffs.SequenceNumber">
+                    <input class="form-control" name="SequenceNumber" [ngModel]="cdi.SequenceNumber" />
+                </segment-detail-display>
+
+                <segment-detail-display label="CDI02 - Product ID Qualifier:" [data]="cdis.ProductIdQualifier" [displaystate]="cdisDiffs.ProductIdQualifier">
+                    <input class="form-control" name="ProductIdQualifier" [ngModel]="cdi.ProductIdQualifier" />
+                </segment-detail-display>
+
+                <segment-detail-display label="CDI03 - Product ID:" [data]="cdis.ProductId" [displaystate]="cdisDiffs.ProductId">
+                    <input class="form-control" name="ProductId" [ngModel]="cdi.ProductId" />
+                </segment-detail-display>
+
+                <segment-detail-display label="CDI04 - Component Ingredient Quantity:" [data]="cdis.Quantity" [displaystate]="cdisDiffs.Quantity">
+                    <input class="form-control" name="Quantity" [ngModel]="cdi.Quantity" />
+                </segment-detail-display>
+
+                <segment-detail-display label="CDI05 - Compound Drug Dosage Units Code:" [data]="cdis.DosageUnitsCode" [displaystate]="cdisDiffs.DosageUnitsCode">
+                    <input class="form-control" name="DosageUnitsCode" [ngModel]="cdi.DosageUnitsCode" />
+                </segment-detail-display>
+        -->
+            </div>
+        </re-card-display>
+
+        <re-card-display 
+            header="AIR - Additional Information Reporting" 
+            primary="true"
+            segmentName="air"
+            [detailDataFetched]="detailDataFetched.air"
+            (fetchClicked)="getSegmentDetails($event)">
+            <div ngModelGroup="air" *ngIf="detailDataFetched.air">
+                    <segment-detail-display data="Submitted Values">
+                            <p>Current Values</p>
+                    </segment-detail-display>
+                    <segment-detail-display label="AIR01 - ID FirstName:" [data]="airs.FirstName">
+                            <input class="form-control" name="FirstName" [ngModel]="air.FirstName" />
+                    </segment-detail-display>
+                    <!-- <segment-detail-display label="AIR01 - State Issuing Rx Serial Number:" [data]="airs.StateIssuingRxSerialNumber" [displaystate]="airsDiffs.StateIssuingRxSerialNumber">
+                        <input class="form-control" name="StateIssuingRxSerialNumber" [ngModel]="air.StateIssuingRxSerialNumber" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR02 - State Issued Rx Serial Number:" [data]="airs.StateIssuedRxSerialNumber" [displaystate]="airsDiffs.StateIssuedRxSerialNumber">
+                        <input class="form-control" name="StateIssuedRxSerialNumber" [ngModel]="air.StateIssuedRxSerialNumber" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR03 - ID Issuing Jurisdiction:" [data]="airs.IssuingJurisdiction" [displaystate]="airsDiffs.IssuingJurisdiction">
+                        <input class="form-control" name="IssuingJurisdiction" [ngModel]="air.IssuingJurisdiction" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR04 - ID Qualifier of Person Dropping Off or Picking Up Rx:" [data]="airs.DropOffPickUpPersonIdQualifier" [displaystate]="airsDiffs.DropOffPickUpPersonIdQualifier">
+                        <input class="form-control" name="DropOffPickUpPersonIdQualifier" [ngModel]="air.DropOffPickUpPersonIdQualifier" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR05 - ID of Person Dropping Off or Picking Up Rx:" [data]="airs.DropOffPickUpPersonIdNumber" [displaystate]="airsDiffs.DropOffPickUpPersonIdNumber">
+                        <input class="form-control" name="DropOffPickUpPersonIdNumber" [ngModel]="air.DropOffPickUpPersonIdNumber" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR06 - Relationship of Person Dropping Off or Picking Up Rx:" [data]="airs.DropOffPickUpPersonRelationshipCode" [displaystate]="airsDiffs.DropOffPickUpPersonRelationshipCode">
+                        <input class="form-control" name="DropOffPickUpPersonRelationshipCode" [ngModel]="air.DropOffPickUpPersonRelationshipCode" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR07 - Last Name of Person Dropping Off or Picking Up Rx:" [data]="airs.DropOffPickUpPersonLastName" [displaystate]="airsDiffs.DropOffPickUpPersonLastName">
+                        <input class="form-control" name="DropOffPickUpPersonLastName" [ngModel]="air.DropOffPickUpPersonLastName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR08 - First Name of Person Dropping Off or Picking Up Rx:" [data]="airs.DropOffPickUpPersonFirstName" [displaystate]="airsDiffs.DropOffPickUpPersonFirstName">
+                        <input class="form-control" name="DropOffPickUpPersonFirstName" [ngModel]="air.DropOffPickUpPersonFirstName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR09 - Last Name or Initials of Pharmacist:" [data]="airs.PharmacistLastNameOrInitials" [displaystate]="airsDiffs.PharmacistLastNameOrInitials">
+                        <input class="form-control" name="PharmacistLastNameOrInitials" [ngModel]="air.PharmacistLastNameOrInitials" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR10 - First Name of Pharmacist:" [data]="airs.PharmacistFirstName" [displaystate]="airsDiffs.PharmacistFirstName">
+                        <input class="form-control" name="PharmacistFirstName" [ngModel]="air.PharmacistFirstName" />
+                    </segment-detail-display>
+
+                    <segment-detail-display label="AIR11 - Dropping Off/Picking Up Identifier Qualifier:" [data]="airs.DropOffPickUpIdQualifier" [displaystate]="airsDiffs.DropOffPickUpIdQualifier">
+                        <input class="form-control" name="DropOffPickUpIdQualifier" [ngModel]="air.DropOffPickUpIdQualifier" />
+                    </segment-detail-display>
+    -->
+            </div>
+        </re-card-display>
+    </form>
+</aw-modal>

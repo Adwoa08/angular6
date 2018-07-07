@@ -1,0 +1,12 @@
+<div class="form-group row">
+        <label class="col-md-7 col-form-label">{{ label }}</label>
+        <div class="col-md-2" [ngClass]="{'segment-detail-form-header': isHeader, 'segment-detail-existing-record': !isHeader}" >
+            {{ data }}
+        </div>
+        <div class="col-md-3 ng-content-col" [class.segment-detail-form-header]="isHeader">
+            <ng-content></ng-content>
+            <small [hidden]="hideDiffIndicator" class="diff-indicator">*</small>
+        </div>
+</div>
+     
+    <!-- ng-class="{'segment-detail-heading': heading }"  ng-class="{'segment-detail-heading': heading, 'segment-details-input-col': !heading }" -->
